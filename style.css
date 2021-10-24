@@ -1,0 +1,11 @@
+#container {
+    display: flex;
+}
+
+#list{
+    max-height: 400px;
+}
+
+.selected{
+    color: red;
+}

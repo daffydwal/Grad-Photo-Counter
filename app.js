@@ -1,15 +1,31 @@
+
 const uploadForm = document.querySelector('#uploadForm');
 const csvFile = document.querySelector('#csvFile');
 const fullList = localforage.createInstance({name: 'FullList'});
 const cereName = document.querySelector('#cereName');
 const cereList = document.querySelector('#ceremoniesList');
 const cereSelectForm = document.querySelector('#ceremonySelector');
+const studentNameDisplay = document.querySelector('#studName');
+const listOfPhotosDisplay = document.querySelector('#listOfPhotos');
+let listOfStudents;
 
 populateCeremoniesList();
 
 let studentList = [];
+let photoNum= 1;
+let currentStudentKey = '';
+let currentStudentName = '';
+let currentStudentNum = '';
+let currentIndex = 0;
+let currentPhotos = [];
+let db;
+let ceremonyStarted = false;
 
-// event listeners
+//**********
+//
+//event listeners
+//
+//**********
 
 uploadForm.addEventListener('submit', function (e){
     e.preventDefault();
@@ -19,7 +35,6 @@ uploadForm.addEventListener('submit', function (e){
     reader.onload = function (e) {
         const text = e.target.result;
         studentList = csvToArray(text);
-        //studentsToList(studentList);
         listCeremonyDB(cereName.value);
     };
     reader.readAsText(input);
@@ -30,22 +45,45 @@ cereSelectForm.addEventListener('submit', function(e){
 
     const selected = cereList.value;
 
-    const db = localforage.createInstance({name: selected});
-    const ListBox = document.querySelector('#list')
-    const list = document.createElement('ol');
-    ListBox.textContent = '';
+    db = localforage.createInstance({name: selected});
+    const listBox = document.querySelector('#list')
+    const list = document.createElement('ul');
+    listBox.textContent = '';
     db.iterate(function (value, key, i){
         const item = document.createElement('li');
-        item.textContent = 'Name: ' + value.Name + ',   Student Number: ' + value.StudNum;
+        item.textContent = i + '  -  ' + value.Name;
         list.appendChild(item);
     })
 
-    ListBox.appendChild(list);
-    
+    listBox.appendChild(list);
+    orderedList = listBox.firstChild;
+    listOfStudents = orderedList.childNodes;
+    studentNameDisplay.textContent = 'Pre-student photos...'
 })
 
+document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+        case 't':
+            takePhoto();
+            break;
+        case 'Enter':
+            if(ceremonyStarted){
+                addAndMove();
+            }else{
+                setStudent();
+                currentPhotos = [];
+                ceremonyStarted = true;
+                listOfStudents[currentIndex].classList.add('selected');
+            }
+            break;
+    }
+})
 
-//functions be here
+// ****************
+//
+// functions
+//
+// ****************
 
 function createCeremonyDB(dbName){
     const db = localforage.createInstance({name: dbName});
@@ -64,7 +102,7 @@ function listCeremonyDB(dbName){
             alert(value + ' already exists!');
             return;
         }else{
-            fullList.setItem(dbName, dbName)
+            fullList.setItem(dbName, dbName).then(function(){populateCeremoniesList();});
             createCeremonyDB(dbName);
         }
     })
@@ -86,24 +124,40 @@ function csvToArray(str, delimiter = ","){
     return arr;
 }
 
-function studentsToList (array){
-    const ListBox = document.querySelector('#list')
-    const list = document.createElement('ol');
-
-    array.forEach(student => {
-        const item = document.createElement('li');
-        item.textContent = student.Name + ': ' + student.StudNum;
-        list.appendChild(item);
-    });
-
-    ListBox.appendChild(list);
-}
-
 function populateCeremoniesList(){
+    cereList.innerHTML = '';
     fullList.iterate(function(value, key, iterationNumber){
         item = document.createElement('option');
         item.value = value;
         item.textContent = value;
         cereList.appendChild(item);
+    })
+}
+
+function takePhoto(){
+    currentPhotos.push(photoNum);
+    listOfPhotosDisplay.textContent += photoNum + "  "
+    photoNum++;
+}
+
+function setStudent(){
+    db.key(currentIndex).then(function (keyName){
+        currentStudentKey = keyName;
+        db.getItem(keyName).then(function (value){
+            currentStudentName = value.Name;
+            currentStudentNum = value.StudNum;
+            studentNameDisplay.textContent = currentStudentName;
+            listOfPhotosDisplay.textContent = '';
+            currentPhotos = [];
+        })
+    })
+}
+
+function addAndMove(){
+    db.setItem(currentStudentKey, {Name: currentStudentName, StudNum: currentStudentNum, photos: currentPhotos}).then(function (){
+        listOfStudents[currentIndex].classList.remove('selected');
+        currentIndex++;
+        listOfStudents[currentIndex].classList.add('selected');
+        setStudent();
     })
 }

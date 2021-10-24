@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <script src="app.js" defer></script>
     <script src="./node_modules/localforage/dist/localforage.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -19,8 +20,13 @@
         <select id="ceremoniesList">
 
         </select>
-        <input type="submit" value="Show me!" />
+        <input type="submit" value="Load" />
     </form>
-
-    <div id="list"></div>
+    <div id="container">
+        <div id="list"></div>
+        <div id="activity">
+            <div id="studName"></div>
+            <div id="listOfPhotos"></div>
+        </div>
+    </div>
 </body>
