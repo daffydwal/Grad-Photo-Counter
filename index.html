@@ -7,10 +7,19 @@
 </head>
 
 <body>
-    <form id="theForm">
+    <form id="uploadForm">
         <input type="file" id="csvFile" accept=".csv" />
+        <label for="cereName">Name this ceremony: </label>
+        <input type="text" id="cereName" name="cereName">
         <br />
         <input type="submit" value="Submit" />
+    </form>
+
+    <form id="ceremonySelector">
+        <select id="ceremoniesList">
+
+        </select>
+        <input type="submit" value="Show me!" />
     </form>
 
     <div id="list"></div>
