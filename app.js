@@ -177,6 +177,7 @@ function addAndMove(){
 }
 
 function selectDown(){
+    if(currentIndex +1 >= listOfStudents.length){return;};
     listOfStudents[currentIndex].classList.remove('selected');
     currentIndex++;
     while(finishedStudents.includes(currentIndex)){currentIndex++};
