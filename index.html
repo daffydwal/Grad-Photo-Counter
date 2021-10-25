@@ -8,25 +8,29 @@
 </head>
 
 <body>
-    <form id="uploadForm">
-        <input type="file" id="csvFile" accept=".csv" />
-        <label for="cereName">Name this ceremony: </label>
-        <input type="text" id="cereName" name="cereName">
-        <br />
-        <input type="submit" value="Submit" />
-    </form>
+    <div id="app">
+        <div id="topSection">
+            <form id="uploadForm">
+                <input type="file" id="csvFile" accept=".csv" />
+                <label for="cereName">Name this ceremony: </label>
+                <input type="text" id="cereName" name="cereName">
+                <br />
+                <input type="submit" value="Submit" />
+            </form>
+            <form id="ceremonySelector">
+                <select id="ceremoniesList">
+                </select>
+                <input type="submit" value="Load" />
+            </form>
+        </div>
 
-    <form id="ceremonySelector">
-        <select id="ceremoniesList">
 
-        </select>
-        <input type="submit" value="Load" />
-    </form>
-    <div id="container">
-        <div id="list"></div>
-        <div id="activity">
-            <div id="studName"></div>
-            <div id="listOfPhotos"></div>
+        <div id="container">
+            <div id="list"></div>
+            <div id="activity">
+                <div id="studName"></div>
+                <div id="listOfPhotos"></div>
+            </div>
         </div>
     </div>
 </body>

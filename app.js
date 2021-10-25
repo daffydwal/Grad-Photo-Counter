@@ -21,6 +21,7 @@ let currentPhotos = [];
 let studentsDB;
 let photosDB;
 let ceremonyStarted = false;
+let studentIsUnknown = false;
 let finishedStudents = [];
 
 //**********
@@ -88,6 +89,9 @@ document.addEventListener('keydown', (e) => {
         case 'ArrowUp':
             e.preventDefault();
             selectUp();
+            break;
+        case 'u':
+            unknownStudent();
             break;
     }
 })
@@ -178,27 +182,25 @@ function addAndMove(){
 
     if(currentPhotos.length > 0){
         photosDB.setItem(currentPhotos[i], {Name: currentStudentName, StudNum: currentStudentNum}).then(function (){
-            finishedStudents.push(currentIndex);
-            if(currentIndex >= 0){
-                listOfStudents[currentIndex].classList.remove('selected');
-                listOfStudents[currentIndex].classList.add('hidden');
-            }
-            currentIndex++;
-            while(finishedStudents.includes(currentIndex)){currentIndex++};
-            listOfStudents[currentIndex].classList.add('selected');
-            setStudent();
+            moveOn();
         })
     }else{
-        finishedStudents.push(currentIndex);
-        if(currentIndex >= 0){
-            listOfStudents[currentIndex].classList.remove('selected');
-            listOfStudents[currentIndex].classList.add('hidden');
-        }
-        currentIndex++;
-        while(finishedStudents.includes(currentIndex)){currentIndex++};
-        listOfStudents[currentIndex].classList.add('selected');
-        setStudent();
+        moveOn();
     }
+}
+
+function moveOn(){
+    if(studentIsUnknown){studentIsUnknown = false; setStudent(); return;}
+    finishedStudents.push(currentIndex);
+    if(currentIndex >= 0){
+        listOfStudents[currentIndex].classList.remove('selected');
+        listOfStudents[currentIndex].classList.add('hidden');
+    }
+    currentIndex++;
+    if (currentIndex >= listOfStudents.length){ceremonyStarted = false; return;}
+    while(finishedStudents.includes(currentIndex)){currentIndex++};
+    listOfStudents[currentIndex].classList.add('selected');
+    setStudent();
 }
 
 function selectDown(){
@@ -215,8 +217,35 @@ function selectUp(){
     if(currentIndex == 0){return;}
     listOfStudents[currentIndex].classList.remove('selected');
     currentIndex--;
-    while(finishedStudents.includes(currentIndex)){currentIndex--};
+    while(finishedStudents.includes(currentIndex)){
+        if(currentIndex <= 0){return;}
+        currentIndex--;
+    };
     listOfStudents[currentIndex].classList.add('selected');
 
     setStudent();
+}
+
+function unknownStudent(){
+    studentIsUnknown = true;
+    currentStudentName = 'Unknown';
+    currentStudentNum = '111111';
+    studentNameDisplay.textContent = 'Unknown Student';
+}
+
+function exportPhotos(){
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += 'PhotoNum,Name,StudNum\r\n'
+    photosDB.iterate(function (value, key, iNum){
+        const row = key + ',' + value.Name + ',' + value.StudNum + '\r\n';
+        csvContent += row;
+    }).then(function(){
+        const encodedUri = encodeURI(csvContent);
+        let link = document.createElement('a');
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Photos_List.csv");
+        document.body.appendChild(link);
+        link.click();
+        console.log('Got to the end')
+    })
 }
