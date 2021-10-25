@@ -16,9 +16,10 @@ let photoNum= 1;
 let currentStudentKey = '';
 let currentStudentName = '';
 let currentStudentNum = '';
-let currentIndex = 0;
+let currentIndex = -1;
 let currentPhotos = [];
-let db;
+let studentsDB;
+let photosDB;
 let ceremonyStarted = false;
 let finishedStudents = [];
 
@@ -46,11 +47,12 @@ cereSelectForm.addEventListener('submit', function(e){
 
     const selected = cereList.value;
 
-    db = localforage.createInstance({name: selected});
+    studentsDB = localforage.createInstance({name: selected, storeName: 'ListOfStudents'});
+    photosDB = localforage.createInstance({name: selected, storeName: 'Photos'})
     const listBox = document.querySelector('#list')
     const list = document.createElement('ul');
     listBox.textContent = '';
-    db.iterate(function (value, key, i){
+    studentsDB.iterate(function (value, key, i){
         const item = document.createElement('li');
         item.textContent = i + '  -  ' + value.Name;
         list.appendChild(item);
@@ -60,6 +62,9 @@ cereSelectForm.addEventListener('submit', function(e){
     orderedList = listBox.firstChild;
     listOfStudents = orderedList.childNodes;
     studentNameDisplay.textContent = 'Pre-student photos...'
+    currentStudentNum = '000000'
+    currentStudentName = 'Pre-students'
+    ceremonyStarted = true;
 })
 
 document.addEventListener('keydown', (e) => {
@@ -73,10 +78,7 @@ document.addEventListener('keydown', (e) => {
             if(ceremonyStarted){
                 addAndMove();
             }else{
-                setStudent();
-                currentPhotos = [];
-                ceremonyStarted = true;
-                listOfStudents[currentIndex].classList.add('selected');
+                return;
             }
             break;
         case 'ArrowDown':
@@ -97,10 +99,10 @@ document.addEventListener('keydown', (e) => {
 // ****************
 
 function createCeremonyDB(dbName){
-    const db = localforage.createInstance({name: dbName});
+    studentsDB = localforage.createInstance({name: dbName, storeName: 'ListOfStudents'});
     let ittNum = "1000";
     studentList.forEach(item =>{
-        db.setItem(ittNum, {StudNum: item.StudNum, Name: item.Name}).then(function (){});
+        studentsDB.setItem(ittNum, {StudNum: item.StudNum, Name: item.Name}).then(function (){});
         ittNum++
         ittNum = ittNum.toString();
     })
@@ -146,15 +148,17 @@ function populateCeremoniesList(){
 }
 
 function takePhoto(){
-    currentPhotos.push(photoNum);
-    listOfPhotosDisplay.textContent += photoNum + "  "
+    let photoNumString = photoNum.toString();
+    photoNumString = photoNumString.padStart(4, '0');
+    currentPhotos.push(photoNumString);
+    listOfPhotosDisplay.textContent += photoNumString + ",  "
     photoNum++;
 }
 
 function setStudent(){
-    db.key(currentIndex).then(function (keyName){
+    studentsDB.key(currentIndex).then(function (keyName){
         currentStudentKey = keyName;
-        db.getItem(keyName).then(function (value){
+        studentsDB.getItem(keyName).then(function (value){
             currentStudentName = value.Name;
             currentStudentNum = value.StudNum;
             studentNameDisplay.textContent = currentStudentName;
@@ -164,16 +168,37 @@ function setStudent(){
     })
 }
 
+
 function addAndMove(){
-    db.setItem(currentStudentKey, {Name: currentStudentName, StudNum: currentStudentNum, photos: currentPhotos}).then(function (){
+    let i = 0
+    while(i < currentPhotos.length -1){
+        photosDB.setItem(currentPhotos[i], {Name: currentStudentName, StudNum: currentStudentNum})
+        i++
+    };
+
+    if(currentPhotos.length > 0){
+        photosDB.setItem(currentPhotos[i], {Name: currentStudentName, StudNum: currentStudentNum}).then(function (){
+            finishedStudents.push(currentIndex);
+            if(currentIndex >= 0){
+                listOfStudents[currentIndex].classList.remove('selected');
+                listOfStudents[currentIndex].classList.add('hidden');
+            }
+            currentIndex++;
+            while(finishedStudents.includes(currentIndex)){currentIndex++};
+            listOfStudents[currentIndex].classList.add('selected');
+            setStudent();
+        })
+    }else{
         finishedStudents.push(currentIndex);
-        listOfStudents[currentIndex].classList.remove('selected');
-        listOfStudents[currentIndex].classList.add('hidden');
+        if(currentIndex >= 0){
+            listOfStudents[currentIndex].classList.remove('selected');
+            listOfStudents[currentIndex].classList.add('hidden');
+        }
         currentIndex++;
         while(finishedStudents.includes(currentIndex)){currentIndex++};
         listOfStudents[currentIndex].classList.add('selected');
         setStudent();
-    })
+    }
 }
 
 function selectDown(){
