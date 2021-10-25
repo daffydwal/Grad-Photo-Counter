@@ -20,6 +20,7 @@ let currentIndex = 0;
 let currentPhotos = [];
 let db;
 let ceremonyStarted = false;
+let finishedStudents = [];
 
 //**********
 //
@@ -64,9 +65,11 @@ cereSelectForm.addEventListener('submit', function(e){
 document.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 't':
+            e.preventDefault();
             takePhoto();
             break;
         case 'Enter':
+            e.preventDefault();
             if(ceremonyStarted){
                 addAndMove();
             }else{
@@ -75,6 +78,14 @@ document.addEventListener('keydown', (e) => {
                 ceremonyStarted = true;
                 listOfStudents[currentIndex].classList.add('selected');
             }
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            selectDown();
+            break;
+        case 'ArrowUp':
+            e.preventDefault();
+            selectUp();
             break;
     }
 })
@@ -155,9 +166,31 @@ function setStudent(){
 
 function addAndMove(){
     db.setItem(currentStudentKey, {Name: currentStudentName, StudNum: currentStudentNum, photos: currentPhotos}).then(function (){
+        finishedStudents.push(currentIndex);
         listOfStudents[currentIndex].classList.remove('selected');
+        listOfStudents[currentIndex].classList.add('hidden');
         currentIndex++;
+        while(finishedStudents.includes(currentIndex)){currentIndex++};
         listOfStudents[currentIndex].classList.add('selected');
         setStudent();
     })
+}
+
+function selectDown(){
+    listOfStudents[currentIndex].classList.remove('selected');
+    currentIndex++;
+    while(finishedStudents.includes(currentIndex)){currentIndex++};
+    listOfStudents[currentIndex].classList.add('selected');
+
+    setStudent();
+}
+
+function selectUp(){
+    if(currentIndex == 0){return;}
+    listOfStudents[currentIndex].classList.remove('selected');
+    currentIndex--;
+    while(finishedStudents.includes(currentIndex)){currentIndex--};
+    listOfStudents[currentIndex].classList.add('selected');
+
+    setStudent();
 }
