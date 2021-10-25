@@ -7,6 +7,8 @@ const cereList = document.querySelector('#ceremoniesList');
 const cereSelectForm = document.querySelector('#ceremonySelector');
 const studentNameDisplay = document.querySelector('#studName');
 const listOfPhotosDisplay = document.querySelector('#listOfPhotos');
+const addBtn = document.querySelector('#addBtn');
+const loadBtn = document.querySelector('#loadBtn');
 let listOfStudents;
 
 populateCeremoniesList();
@@ -29,6 +31,22 @@ let finishedStudents = [];
 //event listeners
 //
 //**********
+
+addBtn.addEventListener('click', function(){
+    if(uploadForm.classList.contains('hidden')){
+        uploadForm.classList.remove('hidden');
+    }else{
+        uploadForm.classList.add('hidden');
+    }
+})
+
+loadBtn.addEventListener('click', function(){
+    if(cereSelectForm.classList.contains('hidden')){
+        cereSelectForm.classList.remove('hidden');
+    }else{
+        cereSelectForm.classList.add('hidden');
+    }
+})
 
 uploadForm.addEventListener('submit', function (e){
     e.preventDefault();
@@ -66,6 +84,7 @@ cereSelectForm.addEventListener('submit', function(e){
     currentStudentNum = '000000'
     currentStudentName = 'Pre-students'
     ceremonyStarted = true;
+    cereSelectForm.classList.add('hidden');
 })
 
 document.addEventListener('keydown', (e) => {
@@ -121,6 +140,7 @@ function listCeremonyDB(dbName){
         }else{
             fullList.setItem(dbName, dbName).then(function(){populateCeremoniesList();});
             createCeremonyDB(dbName);
+            uploadForm.classList.add('hidden');
         }
     })
 }
