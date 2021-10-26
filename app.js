@@ -101,10 +101,6 @@ cereSelectForm.addEventListener('submit', function(e){
 
 document.addEventListener('keydown', (e) => {
     switch (e.key) {
-        case 't':
-            e.preventDefault();
-            takePhoto();
-            break;
         case 'Enter':
             e.preventDefault();
             if(ceremonyStarted){
