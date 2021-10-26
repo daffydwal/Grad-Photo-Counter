@@ -9,6 +9,7 @@ const studentNameDisplay = document.querySelector('#studName');
 const listOfPhotosDisplay = document.querySelector('#listOfPhotos');
 const addBtn = document.querySelector('#addBtn');
 const loadBtn = document.querySelector('#loadBtn');
+const exportBtn = document.querySelector('#exportBtn');
 let listOfStudents;
 
 populateCeremoniesList();
@@ -46,6 +47,10 @@ loadBtn.addEventListener('click', function(){
     }else{
         cereSelectForm.classList.add('hidden');
     }
+})
+
+exportBtn.addEventListener('click', function(){
+    exportPhotos();
 })
 
 uploadForm.addEventListener('submit', function (e){
@@ -175,19 +180,23 @@ function takePhoto(){
     let photoNumString = photoNum.toString();
     photoNumString = photoNumString.padStart(4, '0');
     currentPhotos.push(photoNumString);
-    listOfPhotosDisplay.textContent += photoNumString + ",  "
+    const p = document.createElement('p');
+    p.textContent = photoNumString;
+    listOfPhotosDisplay.appendChild(p);
     photoNum++;
 }
 
-function setStudent(){
+function setStudent(clear){
     studentsDB.key(currentIndex).then(function (keyName){
         currentStudentKey = keyName;
         studentsDB.getItem(keyName).then(function (value){
             currentStudentName = value.Name;
             currentStudentNum = value.StudNum;
             studentNameDisplay.textContent = currentStudentName;
-            listOfPhotosDisplay.textContent = '';
-            currentPhotos = [];
+            if(clear){
+                listOfPhotosDisplay.textContent = '';
+                currentPhotos = [];
+            }
         })
     })
 }
@@ -210,7 +219,7 @@ function addAndMove(){
 }
 
 function moveOn(){
-    if(studentIsUnknown){studentIsUnknown = false; setStudent(); return;}
+    if(studentIsUnknown){studentIsUnknown = false; setStudent(true); return;}
     finishedStudents.push(currentIndex);
     if(currentIndex >= 0){
         listOfStudents[currentIndex].classList.remove('selected');
@@ -220,7 +229,7 @@ function moveOn(){
     if (currentIndex >= listOfStudents.length){ceremonyStarted = false; return;}
     while(finishedStudents.includes(currentIndex)){currentIndex++};
     listOfStudents[currentIndex].classList.add('selected');
-    setStudent();
+    setStudent(true);
 }
 
 function selectDown(){
@@ -230,7 +239,7 @@ function selectDown(){
     while(finishedStudents.includes(currentIndex)){currentIndex++};
     listOfStudents[currentIndex].classList.add('selected');
 
-    setStudent();
+    setStudent(false);
 }
 
 function selectUp(){
@@ -243,7 +252,7 @@ function selectUp(){
     };
     listOfStudents[currentIndex].classList.add('selected');
 
-    setStudent();
+    setStudent(false);
 }
 
 function unknownStudent(){
