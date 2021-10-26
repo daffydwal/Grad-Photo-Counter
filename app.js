@@ -7,9 +7,11 @@ const cereList = document.querySelector('#ceremoniesList');
 const cereSelectForm = document.querySelector('#ceremonySelector');
 const studentNameDisplay = document.querySelector('#studName');
 const listOfPhotosDisplay = document.querySelector('#listOfPhotos');
+const serialMessage = document.querySelector('#serialMessage');
 const addBtn = document.querySelector('#addBtn');
 const loadBtn = document.querySelector('#loadBtn');
 const exportBtn = document.querySelector('#exportBtn');
+const connBtn = document.querySelector('#connBtn');
 let listOfStudents;
 
 populateCeremoniesList();
@@ -52,6 +54,10 @@ loadBtn.addEventListener('click', function(){
 
 exportBtn.addEventListener('click', function(){
     exportPhotos();
+})
+
+connBtn.addEventListener('click', function(){
+    connect();
 })
 
 uploadForm.addEventListener('submit', function (e){

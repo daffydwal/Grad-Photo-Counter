@@ -15,15 +15,19 @@ html{
 
 #optionsSection{
     background-color: #7d2248;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 15px 0px 15px;
 }
 
-#addBtn, #loadBtn, #exportBtn{
+#addBtn, #loadBtn, #exportBtn, #connBtn{
     width: 35px;
     height: 35px;
     padding: 8px;
 }
 
-#addBtn:hover, #loadBtn:hover, #exportBtn:hover{
+#addBtn:hover, #loadBtn:hover, #exportBtn:hover, #connBtn:hover{
     background-color: #444;
 }
 
@@ -91,4 +95,15 @@ li{
     flex-direction: column;
     width: 1200px;
     height: 100%;
+}
+
+.warning{
+    color: red;
+    font-size: xx-large;
+    background-color: black;
+}
+
+.connected{
+    color: lightgreen;
+    font-size: large;
 }
