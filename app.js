@@ -273,7 +273,7 @@ function exportPhotos(){
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += 'PhotoNum,Name,StudNum\r\n'
     photosDB.iterate(function (value, key, iNum){
-        const row = key + ',' + value.Name + ',' + value.StudNum + '\r\n';
+        const row = "IMG_" + key + '.JPG' + ',' + value.Name + ',' + value.StudNum + '\r\n';
         csvContent += row;
     }).then(function(){
         const encodedUri = encodeURI(csvContent);
