@@ -9,12 +9,6 @@ os.mkdir(sampDir)
 with open('Photos_List.csv') as f:
     lines = csv.DictReader(f)
 
-    # totalRows = 0
-    # for row in lines:
-    #     totalRows += 1
-    #     print('Added a row')
-    
-    # print('Moving on')
 
     for idx, line in enumerate(lines):
         try:
@@ -31,5 +25,5 @@ with open('Photos_List.csv') as f:
             print('File not found!')
             pass
 
-# os.rename('Photos_List.csv', './' + directory + '/Processed_Photos.csv')
+os.rename('Photos_List.csv', './' + directory + '/Processed_Photos.csv')
 
