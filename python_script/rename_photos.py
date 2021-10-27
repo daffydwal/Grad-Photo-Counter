@@ -1,5 +1,6 @@
 import os
 import csv
+import time
 
 directory = input("Please name this ceremony: ")
 sampDir = directory + "/Samples"
@@ -27,3 +28,38 @@ with open('Photos_List.csv') as f:
 
 os.rename('Photos_List.csv', './' + directory + '/Processed_Photos.csv')
 
+print(' _   _ ___ ____ ')
+print('| | | |_ _|  _ \\ ')
+print('| |_| || || |_) |')
+print('|  _  || ||  _ < ')
+print('|_| |_|___|_| \\_\\')
+
+time.sleep(0.5)
+
+print('  ___  _____ ____ ')
+print(' / _ \\| ____/ ___|')
+print('| | | |  _| \\___ \\ ')
+print('| |_| | |___ ___) |')
+print(' \\___/|_____|____/ ')
+
+time.sleep(0.557)
+
+print(' ___ _ ____  ')
+print('|_ _( )  _ \\ ')
+print(' | ||/| |_) |')
+print(' | |  |  _ < ')
+print('|___| |_| \\_\\')
+
+time.sleep(0.3)
+
+print(' ____  ____  ___ _______   ______   ____  ___  _   ')
+print('|  _ \\|  _ \|_ _|  ___\\ \\ / / ___| / ___|/ _ \\| |  ')
+print('| |_) | |_) || || |_   \\ V /\\___ \\| |  _| | | | | ')
+print('|  __/|  _ < | ||  _|   | |  ___) | |_| | |_| | |___ ')
+print('|_|   |_| \\_\\___|_|     |_| |____/ \\____|\\___/|_____|')
+
+time.sleep(2)
+
+print('See?')
+
+time.sleep(0.5)
