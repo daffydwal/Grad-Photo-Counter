@@ -26,6 +26,7 @@ let currentIndex = -1;
 let currentPhotos = [];
 let studentsDB;
 let photosDB;
+let loadedCereName;
 let ceremonyStarted = false;
 let studentIsUnknown = false;
 let finishedStudents = [];
@@ -80,6 +81,7 @@ cereSelectForm.addEventListener('submit', function(e){
 
     studentsDB = localforage.createInstance({name: selected, storeName: 'ListOfStudents'});
     photosDB = localforage.createInstance({name: selected, storeName: 'Photos'})
+    loadedCereName = selected;
     const listBox = document.querySelector('#list')
     const list = document.createElement('ul');
     listBox.textContent = '';
@@ -281,7 +283,7 @@ function exportPhotos(){
         const encodedUri = encodeURI(csvContent);
         let link = document.createElement('a');
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "Photos_List.csv");
+        link.setAttribute("download", loadedCereName + " Photos.csv");
         document.body.appendChild(link);
         link.click();
         console.log('Got to the end')
