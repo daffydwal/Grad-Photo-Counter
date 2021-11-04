@@ -63,6 +63,7 @@ connBtn.addEventListener('click', function(){
 
 uploadForm.addEventListener('submit', function (e){
     e.preventDefault();
+    if(!cereName.value){alert("Please enter a name"); return;}
     const input = csvFile.files[0];
     const reader = new FileReader();
 
