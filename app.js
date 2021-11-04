@@ -17,7 +17,6 @@ let listOfStudents;
 populateCeremoniesList();
 
 let studentList = [];
-let photoNum = 0;
 let tempPhotoNum = '';
 let currentStudentKey = '';
 let currentStudentName = '';
@@ -183,16 +182,16 @@ function populateCeremoniesList(){
 }
 
 function takePhoto(num){
+    console.log("Received: " + num);
     tempPhotoNum += num.toString();
-    if (parseInt(tempPhotoNum) < photoNum){
+    if (!tempPhotoNum.includes('$')){
         return;
     }
-    let photoNumString = tempPhotoNum.padStart(4, '0');
+    let photoNumString = tempPhotoNum.slice(0, -1).padStart(4, '0');
     currentPhotos.push(photoNumString);
     const p = document.createElement('p');
     p.textContent = photoNumString;
     listOfPhotosDisplay.appendChild(p);
-    photoNum++;
     tempPhotoNum = '';
 }
 

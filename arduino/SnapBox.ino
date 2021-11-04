@@ -28,6 +28,7 @@ void loop() {
 
   if (!buttonState && !btnPressed){
       Serial.print(numberShots);
+      Serial.print('$');
       btnPressed = true;
       numberShots++;
     }
