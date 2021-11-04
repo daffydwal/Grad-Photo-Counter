@@ -135,9 +135,7 @@ function createCeremonyDB(dbName){
     studentsDB = localforage.createInstance({name: dbName, storeName: 'ListOfStudents'});
     let ittNum = "1000";
     studentList.forEach(item =>{
-        const studNumArray = item.StudNum.split("/");
-        const studNumClean = studNumArray[0];
-        studentsDB.setItem(ittNum, {StudNum: studNumClean, Name: item.Name}).then(function (){});
+        studentsDB.setItem(ittNum, {StudNum: item.StudNum, Name: item.Name}).then(function (){});
         ittNum++
         ittNum = ittNum.toString();
     })
