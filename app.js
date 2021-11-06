@@ -12,6 +12,8 @@ const addBtn = document.querySelector('#addBtn');
 const loadBtn = document.querySelector('#loadBtn');
 const exportBtn = document.querySelector('#exportBtn');
 const connBtn = document.querySelector('#connBtn');
+const loadedCountTxt = document.querySelector('#loadedCount');
+const finishedCountTxt = document.querySelector('#finishedCount');
 let listOfStudents;
 
 populateCeremoniesList();
@@ -29,6 +31,7 @@ let loadedCereName;
 let ceremonyStarted = false;
 let studentIsUnknown = false;
 let finishedStudents = [];
+let totalFinished = -1;
 
 //**********
 //
@@ -89,16 +92,18 @@ cereSelectForm.addEventListener('submit', function(e){
         const item = document.createElement('li');
         item.textContent = i + '  -  ' + value.Name;
         list.appendChild(item);
-    })
+    }).then(function () {
 
-    listBox.appendChild(list);
-    orderedList = listBox.firstChild;
-    listOfStudents = orderedList.childNodes;
-    studentNameDisplay.textContent = 'Pre-student photos...'
-    currentStudentNum = '000000'
-    currentStudentName = 'Pre-students'
-    ceremonyStarted = true;
-    cereSelectForm.classList.add('hidden');
+        listBox.appendChild(list);
+        orderedList = listBox.firstChild;
+        listOfStudents = orderedList.childNodes;
+        studentNameDisplay.textContent = 'Pre-student photos...'
+        currentStudentNum = '000000'
+        currentStudentName = 'Pre-students'
+        ceremonyStarted = true;
+        cereSelectForm.classList.add('hidden');
+        loadedCountTxt.textContent = listOfStudents.length;
+    })
 })
 
 document.addEventListener('keydown', (e) => {
@@ -212,6 +217,9 @@ function setStudent(clear){
 
 
 function addAndMove(){
+    totalFinished = totalFinished+1;
+    finishedCountTxt.textContent = totalFinished;
+    
     let i = 0
     while(i < currentPhotos.length -1){
         photosDB.setItem(currentPhotos[i], {Name: currentStudentName, StudNum: currentStudentNum})

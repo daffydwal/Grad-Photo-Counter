@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <title>Grad Photo Counter</title>
+    <title>Instagrad</title>
     <meta charset="utf-8">
     <script src="app.js" defer></script>
     <script src="serial.js" defer></script>
@@ -33,9 +33,19 @@
 
         <div id="container">
             <div id="list"></div>
-            <div id="activity">
-                <div id="studName">Select a ceremony to begin</div>
-                <div id="listOfPhotos"></div>
+            <div id="rightPane">
+                <div id="activity">
+                    <div id="studName">Select a ceremony to begin</div>
+                    <div id="listOfPhotos"></div>
+                </div>
+                <div id="stats">
+                    <div class="statBox">
+                        <div>Total in ceremony</div><div class="statNum" id="loadedCount">0</div>
+                    </div>
+                    <div class="statBox">
+                        <div>Total finished</div><div class="statNum" id="finishedCount">0</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
