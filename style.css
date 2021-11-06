@@ -82,8 +82,10 @@ li{
 
 #listOfPhotos{
     display: flex;
+    height: 90%;
     flex-direction: column;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 #listOfPhotos > p{
