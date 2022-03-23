@@ -5,17 +5,17 @@ import glob
 
 cereName = ""
 
-def checkPng():
-    wtmkPng = glob.glob("./WATERMARK.png")
+# def checkPng():
+#     wtmkPng = glob.glob("./WATERMARK.png")
 
-    if len(wtmkPng) < 1:
-        print('Watermark image is missing')
-        print('Please ensure the watermark file is present, and is titled "WATERMARK.png" (case sensitive)')
-        time.sleep(4)
-        quit()
-    else:
-        print('Found watermark PNG, continuing...')
-        time.sleep(1)
+#     if len(wtmkPng) < 1:
+#         print('Watermark image is missing')
+#         print('Please ensure the watermark file is present, and is titled "WATERMARK.png" (case sensitive)')
+#         time.sleep(4)
+#         quit()
+#     else:
+#         print('Found watermark PNG, continuing...')
+#         time.sleep(1)
 
 def getCeremony():
     global cereDir
@@ -115,12 +115,12 @@ print("Welcome!")
 time.sleep(1)
 print("")
 
-checkPng()
+# checkPng()
 getCeremony()
 
-sampDir = cereDir + "/Samples"
+# sampDir = cereDir + "/Samples"
 os.mkdir(cereDir)
-os.mkdir(sampDir)
+# os.mkdir(sampDir)
 
 with open(selectedCSV) as f:
     lines = csv.DictReader(f)
@@ -129,14 +129,14 @@ with open(selectedCSV) as f:
     for idx, line in enumerate(lines):
         try:
             newName = './' + cereDir + '/' + line['PhotoNum'] + ' - ' + line['StudNum'] + ' - ' + line['Name'] +  '.JPG'
-            newSamp = './' + cereDir + '/Samples/' + line['PhotoNum'] + ' - ' + line['StudNum'] + ' - ' + line['Name'] + '.JPG'
-            compComm = 'magick ' + line['PhotoNum'] + '.JPG -resize 800 -quality 70 compressed.JPG'
-            sampComm = 'magick compressed.JPG WATERMARK.png -composite -gravity center ' + '"' + newSamp + '"'
+            # newSamp = './' + cereDir + '/Samples/' + line['PhotoNum'] + ' - ' + line['StudNum'] + ' - ' + line['Name'] + '.JPG'
+            # compComm = 'magick ' + line['PhotoNum'] + '.JPG -resize 800 -quality 70 compressed.JPG'
+            # sampComm = 'magick compressed.JPG WATERMARK.png -composite -gravity center ' + '"' + newSamp + '"'
             print('Processing photo ' + str(idx+1))
-            os.system(compComm)
-            os.system(sampComm)
+            # os.system(compComm)
+            # os.system(sampComm)
             os.rename(line['PhotoNum'] + '.JPG', newName)
-            os.remove('compressed.JPG')
+            # os.remove('compressed.JPG')
         except FileNotFoundError:
             print('File not found!')
             pass
